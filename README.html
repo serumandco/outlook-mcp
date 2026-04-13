@@ -388,9 +388,21 @@ npm --version</code></pre>
 
     <div class="step-title"><span class="step">3</span><h3>Recuperer et copier le dossier du serveur</h3></div>
 
-    <p><strong>Ou trouver le dossier ?</strong> Votre administrateur ou collegue vous a transmis le dossier <code>outlook-deploy</code> par l'un de ces moyens :</p>
+    <p><strong>Ou trouver le dossier ?</strong></p>
+
+    <p><strong>Methode recommandee — Cloner depuis GitHub :</strong></p>
+    <p>Ouvrez un terminal (touche Windows, tapez "cmd", Entree) et tapez :</p>
+    <pre><code>cd C:\Users\VOTRE_NOM\.claude\mcp-servers
+git clone https://github.com/serumandco/outlook-mcp.git outlook</code></pre>
+    <p>Cela telecharge automatiquement le dossier et le nomme <code>outlook</code>. Vous pouvez passer directement a l'<a href="#etape2-step4">etape 4 (npm install)</a>.</p>
+
+    <div class="box info">
+      <strong>Git n'est pas installe ?</strong> Telechargez-le sur <strong>https://git-scm.com</strong> (cliquez "Download for Windows", installez avec les options par defaut, redemarrez le terminal).
+    </div>
+
+    <p><strong>Methodes alternatives :</strong></p>
     <ul>
-      <li><strong>Depuis GitHub :</strong> telechargez le dossier depuis le repo <code>serumandco/serum-plugin</code> (bouton vert "Code" > "Download ZIP"), puis decompressez-le</li>
+      <li><strong>Depuis GitHub sans Git :</strong> allez sur <a href="https://github.com/serumandco/outlook-mcp" target="_blank">github.com/serumandco/outlook-mcp</a>, cliquez le bouton vert <strong>"Code"</strong> > <strong>"Download ZIP"</strong>, decompressez et renommez le dossier en <code>outlook</code></li>
       <li><strong>Depuis un lien partage :</strong> OneDrive, Google Drive ou Teams — telechargez et decompressez le .zip</li>
       <li><strong>Depuis une cle USB ou un dossier reseau :</strong> copiez le dossier directement</li>
     </ul>
@@ -407,7 +419,7 @@ npm --version</code></pre>
     <pre><code>mkdir C:\Users\VOTRE_NOM\.claude\mcp-servers\outlook</code></pre>
     <p>Puis copiez tout le contenu du dossier <code>outlook-deploy</code> dedans.</p>
 
-    <div class="step-title"><span class="step">4</span><h3>Installer les dependances</h3></div>
+    <div class="step-title" id="etape2-step4"><span class="step">4</span><h3>Installer les dependances</h3></div>
     <p>Dans le terminal, naviguez vers le dossier et installez :</p>
     <pre><code>cd C:\Users\VOTRE_NOM\.claude\mcp-servers\outlook
 npm install</code></pre>
