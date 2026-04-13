@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serveur MCP Outlook — Guide d'installation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f6fa;
+      color: #1a1a2e;
+      line-height: 1.7;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #0212EB;
+      padding: 12px 30px;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(2,18,235,0.3);
+    }
+    nav img { height: 28px; }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    nav a:hover { opacity: 1; }
+
+    /* CONTAINER */
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 80px 24px 60px;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #0212EB 0%, #0a1a6e 100%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 48px 40px;
+      margin-bottom: 40px;
+    }
+    .hero h1 {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+    .hero p {
+      font-size: 17px;
+      opacity: 0.9;
+      max-width: 600px;
+    }
+
+    /* SECTIONS */
+    section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 36px 36px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    h2 {
+      color: #0212EB;
+      font-size: 22px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #23EEAE;
+      display: inline-block;
+    }
+    h3 {
+      color: #0a1a6e;
+      font-size: 17px;
+      margin: 24px 0 10px;
+    }
+    p, li { font-size: 15px; }
+    ul, ol { padding-left: 24px; margin: 10px 0; }
+    li { margin-bottom: 8px; }
+
+    /* BADGES */
+    .badge {
+      display: inline-block;
+      background: #23EEAE;
+      color: #0a1a2e;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+    }
+    .badge.blue { background: #0212EB; color: #fff; }
+
+    /* CODE */
+    pre {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      border-left: 4px solid #23EEAE;
+      border-radius: 8px;
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-family: 'Courier New', Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 14px 0;
+    }
+    code {
+      background: #e8e9f3;
+      color: #0212EB;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', Consolas, monospace;
+      font-size: 13px;
+    }
+    pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+    }
+
+    /* STEP NUMBERS */
+    .step {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: #0212EB;
+      color: #fff;
+      border-radius: 50%;
+      font-weight: bold;
+      font-size: 15px;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+    .step-title {
+      display: flex;
+      align-items: center;
+      margin: 28px 0 14px;
+    }
+    .step-title h3 { margin: 0; }
+
+    /* WARNING / INFO BOXES */
+    .box {
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    .box.warning {
+      background: #FEC200;
+      color: #1a1a2e;
+      border-left: 4px solid #e6a800;
+    }
+    .box.info {
+      background: #e8f4fd;
+      color: #0a1a6e;
+      border-left: 4px solid #0212EB;
+    }
+    .box.success {
+      background: #e6fff5;
+      color: #0a4a2e;
+      border-left: 4px solid #23EEAE;
+    }
+    .box.danger {
+      background: #ffe6e6;
+      color: #8b0000;
+      border-left: 4px solid #FF2F2F;
+    }
+
+    /* TOOLS TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+    th {
+      background: #0212EB;
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 13px;
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+    tr:nth-child(even) { background: #f9f9ff; }
+
+    /* DETAILS (FAQ) */
+    details {
+      background: #f9f9ff;
+      border: 1px solid #e8e9f3;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 10px 0;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      color: #0212EB;
+      font-size: 14px;
+    }
+    details p { margin-top: 10px; font-size: 14px; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #888;
+      font-size: 13px;
+    }
+    footer a { color: #0212EB; }
+
+    /* SCREENSHOTS PLACEHOLDER */
+    .screenshot {
+      background: #e8e9f3;
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      color: #888;
+      font-size: 13px;
+      margin: 14px 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <img src="https://www.serumdigital.com/wp-content/uploads/2025/05/logo-serumandco.svg" alt="Serum & Co" onerror="this.outerHTML='<span style=color:#fff;font-weight:bold>SERUM &amp; CO</span>'">
+  <a href="#outils">Outils</a>
+  <a href="#etape1">1. Azure</a>
+  <a href="#etape2">2. Installation</a>
+  <a href="#etape3">3. Claude Code</a>
+  <a href="#etape4">4. Connexion</a>
+  <a href="#etape5">5. Recap auto</a>
+  <a href="#depannage">Depannage</a>
+  <a href="#admin">Admin</a>
+</nav>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Serveur MCP Outlook</h1>
+    <p>Connectez Claude Code a votre boite mail et calendrier Microsoft 365. Lisez vos mails, envoyez des reponses, creez des evenements — directement depuis Claude.</p>
+  </div>
+
+  <!-- CE QUE FAIT CE SERVEUR -->
+  <section id="outils">
+    <h2>Ce que fait ce serveur</h2>
+    <p>Ce serveur ajoute <strong>8 outils</strong> a Claude Code pour interagir avec votre compte Microsoft 365 :</p>
+
+    <table>
+      <tr><th>Outil</th><th>Description</th><th>Exemple</th></tr>
+      <tr><td><code>authenticate</code></td><td>Connexion OAuth2 a votre compte</td><td>"Connecte-toi a Outlook"</td></tr>
+      <tr><td><code>list_emails</code></td><td>Lister les emails d'un dossier</td><td>"Montre-moi mes 10 derniers mails"</td></tr>
+      <tr><td><code>read_email</code></td><td>Lire un email complet</td><td>"Lis le mail d'Alexis"</td></tr>
+      <tr><td><code>search_emails</code></td><td>Rechercher par mots-cles</td><td>"Cherche les mails de BNP"</td></tr>
+      <tr><td><code>send_email</code></td><td>Envoyer un email</td><td>"Envoie un mail a Kelly pour..."</td></tr>
+      <tr><td><code>create_event</code></td><td>Creer un evenement calendrier</td><td>"Cree un RDV mercredi a 14h"</td></tr>
+      <tr><td><code>list_events</code></td><td>Voir les prochains evenements</td><td>"Quels sont mes RDV cette semaine ?"</td></tr>
+      <tr><td><code>delete_event</code></td><td>Supprimer un evenement</td><td>"Annule le RDV de vendredi"</td></tr>
+    </table>
+
+    <div class="box info">
+      <strong>Vos donnees restent privees.</strong> Chaque personne se connecte avec son propre compte. Claude n'accede qu'a VOS mails et VOS evenements. Personne d'autre ne peut voir vos donnees.
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- ETAPE 1 : AZURE -->
+  <!-- ========================================== -->
+  <section id="etape1">
+    <h2>Etape 1 : Creer l'application Azure</h2>
+    <p>Cette etape est faite <strong>une seule fois</strong> par un administrateur. Si quelqu'un vous a deja donne un CLIENT_ID, TENANT_ID et CLIENT_SECRET, passez directement a l'<a href="#etape2">etape 2</a>.</p>
+
+    <div class="step-title"><span class="step">1</span><h3>Ouvrir le portail Azure</h3></div>
+    <p>Rendez-vous sur <strong>https://portal.azure.com</strong> et connectez-vous avec votre compte Microsoft 365 professionnel.</p>
+
+    <div class="step-title"><span class="step">2</span><h3>Aller dans "Inscriptions d'applications"</h3></div>
+    <ol>
+      <li>Dans la barre de recherche en haut, tapez <strong>"Inscriptions d'applications"</strong> (ou "App registrations" en anglais)</li>
+      <li>Cliquez sur le resultat <strong>"Inscriptions d'applications"</strong> sous "Services"</li>
+    </ol>
+
+    <div class="step-title"><span class="step">3</span><h3>Creer une nouvelle application</h3></div>
+    <ol>
+      <li>Cliquez sur le bouton <strong>"+ Nouvelle inscription"</strong> en haut</li>
+      <li>Remplissez les champs :
+        <ul>
+          <li><strong>Nom :</strong> <code>Claude Code Outlook MCP</code> (ou le nom de votre choix)</li>
+          <li><strong>Types de comptes pris en charge :</strong> choisissez <code>Comptes dans cet annuaire organisationnel uniquement</code></li>
+          <li><strong>URI de redirection :</strong>
+            <ul>
+              <li>Selectionnez <strong>"Web"</strong> dans le menu deroulant</li>
+              <li>Entrez exactement : <code>http://localhost:3333/callback</code></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Cliquez sur <strong>"S'inscrire"</strong></li>
+    </ol>
+
+    <div class="box warning">
+      <strong>Important :</strong> L'URI de redirection doit etre EXACTEMENT <code>http://localhost:3333/callback</code> (avec http, pas https). La moindre difference empechera l'authentification.
+    </div>
+
+    <div class="step-title"><span class="step">4</span><h3>Recuperer le CLIENT_ID et le TENANT_ID</h3></div>
+    <p>Apres l'inscription, vous arrivez sur la page <strong>"Vue d'ensemble"</strong> de l'application. Copiez ces deux valeurs :</p>
+    <ul>
+      <li><strong>ID d'application (client)</strong> → c'est votre <code>CLIENT_ID</code></li>
+      <li><strong>ID de l'annuaire (locataire)</strong> → c'est votre <code>TENANT_ID</code></li>
+    </ul>
+
+    <div class="box info">
+      <strong>Astuce :</strong> Cliquez sur l'icone de copie a droite de chaque valeur pour la copier dans le presse-papiers. Collez-les quelque part temporairement (un bloc-notes par exemple).
+    </div>
+
+    <div class="step-title"><span class="step">5</span><h3>Creer un secret client</h3></div>
+    <ol>
+      <li>Dans le menu de gauche, cliquez sur <strong>"Certificats et secrets"</strong></li>
+      <li>Cliquez sur <strong>"+ Nouveau secret client"</strong></li>
+      <li>Description : <code>MCP Server</code></li>
+      <li>Expiration : <strong>24 mois</strong> (recommande)</li>
+      <li>Cliquez sur <strong>"Ajouter"</strong></li>
+      <li><strong>IMPORTANT :</strong> Copiez immediatement la colonne <strong>"Valeur"</strong> → c'est votre <code>CLIENT_SECRET</code></li>
+    </ol>
+
+    <div class="box danger">
+      <strong>Attention :</strong> La valeur du secret ne sera visible qu'une seule fois ! Si vous quittez cette page sans la copier, vous devrez en creer un nouveau. Copiez-la MAINTENANT.
+    </div>
+
+    <div class="step-title"><span class="step">6</span><h3>Configurer les permissions</h3></div>
+    <ol>
+      <li>Dans le menu de gauche, cliquez sur <strong>"Autorisations de l'API"</strong></li>
+      <li>Cliquez sur <strong>"+ Ajouter une autorisation"</strong></li>
+      <li>Choisissez <strong>"Microsoft Graph"</strong></li>
+      <li>Choisissez <strong>"Autorisations deleguees"</strong></li>
+      <li>Dans la barre de recherche, cherchez et cochez :
+        <ul>
+          <li><code>Mail.Read</code> — Lire les emails</li>
+          <li><code>Mail.Send</code> — Envoyer des emails</li>
+          <li><code>User.Read</code> — Lire le profil</li>
+          <li><code>Calendars.ReadWrite</code> — Lire et ecrire le calendrier</li>
+        </ul>
+      </li>
+      <li>Cliquez sur <strong>"Ajouter des autorisations"</strong></li>
+    </ol>
+
+    <div class="box success">
+      <strong>C'est fait !</strong> Vous avez maintenant vos 3 identifiants : CLIENT_ID, TENANT_ID et CLIENT_SECRET. Gardez-les precieusement pour l'etape suivante.
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- ETAPE 2 : INSTALLATION -->
+  <!-- ========================================== -->
+  <section id="etape2">
+    <h2>Etape 2 : Installation</h2>
+
+    <div class="step-title"><span class="step">1</span><h3>Installer Node.js (si pas deja fait)</h3></div>
+    <ol>
+      <li>Allez sur <strong>https://nodejs.org</strong></li>
+      <li>Telechargez la version <strong>LTS</strong> (bouton vert)</li>
+      <li>Lancez l'installeur, cliquez "Next" partout, puis "Install"</li>
+      <li>Verifiez l'installation : ouvrez un <strong>terminal</strong> (touche Windows, tapez "cmd", Entree) et tapez :</li>
+    </ol>
+    <pre><code>node --version
+npm --version</code></pre>
+    <p>Vous devriez voir des numeros de version (ex: <code>v20.11.0</code> et <code>10.2.0</code>). Si ca affiche "n'est pas reconnu", redemarrez votre PC et reessayez.</p>
+
+    <div class="step-title"><span class="step">2</span><h3>Installer Claude Code (si pas deja fait)</h3></div>
+    <p>Dans le meme terminal :</p>
+    <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+
+    <div class="step-title"><span class="step">3</span><h3>Recuperer et copier le dossier du serveur</h3></div>
+
+    <p><strong>Ou trouver le dossier ?</strong> Votre administrateur ou collegue vous a transmis le dossier <code>outlook-deploy</code> par l'un de ces moyens :</p>
+    <ul>
+      <li><strong>Depuis GitHub :</strong> telechargez le dossier depuis le repo <code>serumandco/serum-plugin</code> (bouton vert "Code" > "Download ZIP"), puis decompressez-le</li>
+      <li><strong>Depuis un lien partage :</strong> OneDrive, Google Drive ou Teams — telechargez et decompressez le .zip</li>
+      <li><strong>Depuis une cle USB ou un dossier reseau :</strong> copiez le dossier directement</li>
+    </ul>
+
+    <p><strong>Ou le placer ?</strong> Copiez (ou deplacez) le dossier <code>outlook-deploy</code> ici, et renommez-le en <code>outlook</code> :</p>
+    <pre><code>C:\Users\VOTRE_NOM\.claude\mcp-servers\outlook\</code></pre>
+    <p>Remplacez <code>VOTRE_NOM</code> par votre nom d'utilisateur Windows (ex: <code>alexis</code>, <code>safa</code>).</p>
+
+    <div class="box info">
+      <strong>Comment trouver votre nom d'utilisateur ?</strong> Ouvrez un terminal (touche Windows, tapez "cmd", Entree) et tapez <code>echo %USERNAME%</code>. C'est le nom qui s'affiche.
+    </div>
+
+    <p><strong>Le dossier <code>.claude</code> n'existe pas ?</strong> Lancez Claude Code une premiere fois (tapez <code>claude</code> dans le terminal), il creera automatiquement le dossier. Ensuite creez le sous-dossier :</p>
+    <pre><code>mkdir C:\Users\VOTRE_NOM\.claude\mcp-servers\outlook</code></pre>
+    <p>Puis copiez tout le contenu du dossier <code>outlook-deploy</code> dedans.</p>
+
+    <div class="step-title"><span class="step">4</span><h3>Installer les dependances</h3></div>
+    <p>Dans le terminal, naviguez vers le dossier et installez :</p>
+    <pre><code>cd C:\Users\VOTRE_NOM\.claude\mcp-servers\outlook
+npm install</code></pre>
+    <p>Attendez que l'installation se termine (peut prendre 30 secondes).</p>
+
+    <div class="step-title"><span class="step">5</span><h3>Configurer le fichier .env</h3></div>
+    <ol>
+      <li>Dans le dossier <code>outlook</code>, vous trouverez un fichier <code>.env.example</code></li>
+      <li><strong>Copiez-le</strong> et renommez la copie en <code>.env</code> (sans le "example")
+        <pre><code>copy .env.example .env</code></pre>
+      </li>
+      <li>Ouvrez le fichier <code>.env</code> avec le Bloc-notes (clic droit > "Ouvrir avec" > Bloc-notes)</li>
+      <li>Remplacez les valeurs par celles recuperees a l'etape 1 :
+        <pre><code>CLIENT_ID=424e6f78-56e6-4b06-b03b-51e62a429a12
+TENANT_ID=ea1c5526-bf6f-4839-88af-a2551ecd29a6
+CLIENT_SECRET=IQd8Q~votre-vrai-secret-ici</code></pre>
+      </li>
+      <li>Sauvegardez (Ctrl+S) et fermez</li>
+    </ol>
+
+    <div class="box danger">
+      <strong>Ne partagez JAMAIS votre fichier .env !</strong> Il contient vos identifiants confidentiels. Ne l'envoyez pas par email, ne le mettez pas sur GitHub, ne le montrez a personne.
+    </div>
+
+    <div class="step-title"><span class="step">6</span><h3>Tester le serveur</h3></div>
+    <p>Dans le terminal :</p>
+    <pre><code>node index.js</code></pre>
+    <p>Si tout est bien configure, le programme demarre sans erreur. Fermez-le avec <strong>Ctrl+C</strong>. Si vous voyez une erreur, verifiez votre fichier <code>.env</code>.</p>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- ETAPE 3 : CONFIGURATION CLAUDE CODE -->
+  <!-- ========================================== -->
+  <section id="etape3">
+    <h2>Etape 3 : Configurer Claude Code</h2>
+    <p>Il faut indiquer a Claude Code ou trouver le serveur Outlook.</p>
+
+    <div class="step-title"><span class="step">1</span><h3>Ouvrir (ou creer) le fichier de configuration</h3></div>
+    <p>Le fichier se trouve ici :</p>
+    <pre><code>C:\Users\VOTRE_NOM\.claude\.mcp.json</code></pre>
+
+    <div class="box info">
+      <strong>Le dossier <code>.claude</code> est cache.</strong> Pour y acceder : ouvrez l'Explorateur de fichiers, tapez <code>%USERPROFILE%\.claude</code> dans la barre d'adresse, puis Entree.
+    </div>
+
+    <div class="step-title"><span class="step">2</span><h3>Ajouter la configuration Outlook</h3></div>
+
+    <p><strong>Si le fichier n'existe pas</strong>, creez-le avec ce contenu :</p>
+    <pre><code>{
+  "mcpServers": {
+    "outlook": {
+      "command": "node",
+      "args": ["C:\\Users\\VOTRE_NOM\\.claude\\mcp-servers\\outlook\\index.js"]
+    }
+  }
+}</code></pre>
+
+    <p><strong>Si le fichier existe deja</strong>, ajoutez l'entree <code>"outlook"</code> dans la section <code>"mcpServers"</code> :</p>
+    <pre><code>{
+  "mcpServers": {
+    "autre-serveur": { ... },
+    "outlook": {
+      "command": "node",
+      "args": ["C:\\Users\\VOTRE_NOM\\.claude\\mcp-servers\\outlook\\index.js"]
+    }
+  }
+}</code></pre>
+
+    <div class="box warning">
+      <strong>N'oubliez pas</strong> de remplacer <code>VOTRE_NOM</code> par votre nom d'utilisateur Windows. Et attention aux <strong>doubles antislash</strong> <code>\\</code> dans le chemin (obligatoire en JSON).
+    </div>
+
+    <div class="step-title"><span class="step">3</span><h3>Redemarrer Claude Code</h3></div>
+    <p>Fermez Claude Code completement et relancez-le. Il detectera automatiquement le nouveau serveur.</p>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- ETAPE 4 : PREMIERE CONNEXION -->
+  <!-- ========================================== -->
+  <section id="etape4">
+    <h2>Etape 4 : Premiere connexion</h2>
+
+    <div class="step-title"><span class="step">1</span><h3>Demander a Claude de se connecter</h3></div>
+    <p>Dans Claude Code, tapez simplement :</p>
+    <pre><code>Connecte-toi a Outlook</code></pre>
+
+    <div class="step-title"><span class="step">2</span><h3>Autoriser dans le navigateur</h3></div>
+    <ol>
+      <li>Votre navigateur s'ouvre automatiquement sur la page de connexion Microsoft</li>
+      <li>Connectez-vous avec votre compte professionnel</li>
+      <li>Acceptez les permissions demandees (lecture mails, envoi, calendrier)</li>
+      <li>Vous verrez une page blanche avec le message <strong>"Connecte !"</strong></li>
+      <li>Fermez l'onglet du navigateur</li>
+    </ol>
+
+    <div class="step-title"><span class="step">3</span><h3>Verifier que ca marche</h3></div>
+    <p>De retour dans Claude Code, essayez :</p>
+    <pre><code>Montre-moi mes 5 derniers emails</code></pre>
+    <p>Claude devrait lister vos emails recents. Si c'est le cas, tout est fonctionnel !</p>
+
+    <div class="box success">
+      <strong>Bravo !</strong> La connexion est sauvegardee. Vous n'aurez plus besoin de vous reconnecter sauf si le token expire (environ tous les 90 jours). Dans ce cas, Claude vous dira "Token expire" et il suffira de refaire <code>Connecte-toi a Outlook</code>.
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- ETAPE 5 : RECAP AUTO -->
+  <!-- ========================================== -->
+  <section id="etape5">
+    <h2>Etape 5 : Recap quotidien automatique (optionnel)</h2>
+    <p>Vous pouvez configurer un recap automatique de vos emails en attente de reponse, qui apparait dans votre calendrier chaque matin a 9h.</p>
+
+    <h3>Comment ca marche ?</h3>
+    <p>Un script analyse vos emails recus et envoyes des 7 derniers jours, identifie ceux auxquels vous n'avez pas repondu, et cree un evenement dans votre calendrier avec la liste. Si le recap existe deja pour la journee, il ne cree pas de doublon.</p>
+
+    <h3>Exemples de demandes a Claude</h3>
+    <pre><code>Lis mes mails de la semaine et dis-moi lesquels attendent une reponse de ma part
+
+Fais-moi un recap de mes emails non lus
+
+Quels sont mes RDV de la semaine ?
+
+Envoie un mail a thomas@kommit.dev pour proposer un call jeudi</code></pre>
+
+    <div class="box info">
+      <strong>Conseil :</strong> Demandez a Claude de configurer le script de recap automatique pour vous. Il sait le faire !
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- DEPANNAGE -->
+  <!-- ========================================== -->
+  <section id="depannage">
+    <h2>Depannage</h2>
+    <p>Si quelque chose ne fonctionne pas, ouvrez la section correspondante ci-dessous :</p>
+
+    <details>
+      <summary>"Token expire" ou "Non authentifie"</summary>
+      <p>Le token Microsoft a expire (duree de vie ~90 jours). Dans Claude Code, dites simplement <code>Connecte-toi a Outlook</code> pour vous reconnecter. Si ca ne marche pas, supprimez le fichier <code>.msal-cache.json</code> dans le dossier du serveur et reessayez.</p>
+    </details>
+
+    <details>
+      <summary>"AADSTS700016: Application not found"</summary>
+      <p>Le CLIENT_ID dans votre fichier <code>.env</code> est incorrect. Verifiez-le dans le portail Azure > Inscriptions d'applications > votre app > Vue d'ensemble > "ID d'application (client)".</p>
+    </details>
+
+    <details>
+      <summary>"AADSTS7000218: request body must contain client_secret"</summary>
+      <p>Le CLIENT_SECRET est manquant ou incorrect dans votre <code>.env</code>. Si vous l'avez perdu, creez un nouveau secret dans Azure > votre app > Certificats et secrets > Nouveau secret client.</p>
+    </details>
+
+    <details>
+      <summary>"redirect_uri mismatch" ou erreur CORS</summary>
+      <p>L'URI de redirection dans Azure ne correspond pas. Allez dans Azure > votre app > Authentification, et verifiez que l'URI est exactement <code>http://localhost:3333/callback</code> (pas de / final, pas de https).</p>
+    </details>
+
+    <details>
+      <summary>Le navigateur ne s'ouvre pas automatiquement</summary>
+      <p>Si vous etes en SSH ou dans un environnement sans navigateur, copiez l'URL qui apparait dans les logs de Claude Code et ouvrez-la manuellement dans un navigateur.</p>
+    </details>
+
+    <details>
+      <summary>"EADDRINUSE" (port 3333 deja utilise)</summary>
+      <p>Un autre programme utilise le port 3333. Fermez-le (souvent une instance precedente du serveur). Sous Windows : ouvrez un terminal et tapez <code>netstat -ano | findstr 3333</code> pour trouver le processus, puis <code>taskkill /PID [numero] /F</code> pour le fermer.</p>
+    </details>
+
+    <details>
+      <summary>"Variables manquantes dans le fichier .env"</summary>
+      <p>Vous n'avez pas cree le fichier <code>.env</code> ou il est mal rempli. Verifiez qu'il existe dans le meme dossier que <code>index.js</code> et qu'il contient bien CLIENT_ID, TENANT_ID et CLIENT_SECRET sans espaces autour du <code>=</code>.</p>
+    </details>
+
+    <details>
+      <summary>"node n'est pas reconnu comme commande"</summary>
+      <p>Node.js n'est pas installe ou pas dans le PATH. Reinstallez Node.js depuis <strong>https://nodejs.org</strong> (version LTS), redemarrez votre PC, puis reessayez.</p>
+    </details>
+
+    <details>
+      <summary>Claude ne detecte pas le serveur Outlook</summary>
+      <p>Verifiez que :
+        <br>1. Le fichier <code>.mcp.json</code> est bien dans <code>C:\Users\VOTRE_NOM\.claude\</code>
+        <br>2. Le chemin vers <code>index.js</code> est correct (avec des doubles antislash <code>\\</code>)
+        <br>3. Vous avez redemarre Claude Code apres la modification
+        <br>4. <code>npm install</code> a ete execute dans le dossier du serveur
+      </p>
+    </details>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- ADMIN -->
+  <!-- ========================================== -->
+  <section id="admin">
+    <h2>Pour les administrateurs</h2>
+    <p>Si vous etes administrateur Microsoft 365 de votre organisation, vous pouvez autoriser l'application pour tous vos collegues en un clic.</p>
+
+    <h3>Accorder le consentement pour toute l'organisation</h3>
+    <ol>
+      <li>Allez dans le <strong>portail Azure</strong> > <strong>Inscriptions d'applications</strong> > votre app</li>
+      <li>Cliquez sur <strong>"Autorisations de l'API"</strong> dans le menu de gauche</li>
+      <li>Cliquez sur le bouton <strong>"Accorder le consentement de l'administrateur pour [votre organisation]"</strong></li>
+      <li>Confirmez</li>
+    </ol>
+
+    <div class="box info">
+      <strong>Effet :</strong> Vos collegues n'auront plus la popup "Accepter les permissions" lors de leur premiere connexion. L'authentification sera transparente.
+    </div>
+
+    <h3>Distribuer aux collegues</h3>
+    <p>Partagez avec chaque collegue :</p>
+    <ol>
+      <li>Le dossier <code>outlook-deploy</code> (sans le <code>.env</code> !)</li>
+      <li>Les 3 identifiants : CLIENT_ID, TENANT_ID, CLIENT_SECRET (par message prive)</li>
+      <li>Ce guide (le fichier <code>README.html</code>)</li>
+    </ol>
+
+    <div class="box warning">
+      <strong>Securite :</strong> Le CLIENT_SECRET donne acces aux permissions de l'app. Transmettez-le uniquement aux personnes de confiance, de preference via un canal securise (pas par email non chiffre).
+    </div>
+
+    <h3>Rotation du secret</h3>
+    <p>Le secret client expire apres la duree choisie (12 ou 24 mois). Pensez a le renouveler avant expiration :</p>
+    <ol>
+      <li>Azure > votre app > Certificats et secrets > Nouveau secret client</li>
+      <li>Communiquez la nouvelle valeur a tous les utilisateurs</li>
+      <li>Chacun met a jour son fichier <code>.env</code></li>
+      <li>Supprimez l'ancien secret dans Azure</li>
+    </ol>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- RESUME -->
+  <!-- ========================================== -->
+  <section>
+    <h2>Resume rapide</h2>
+    <table>
+      <tr><th>Etape</th><th>Quoi</th><th>Qui</th><th>Combien de fois</th></tr>
+      <tr><td>1. Azure</td><td>Creer l'app + recuperer les identifiants</td><td>Admin (une personne)</td><td>1 fois</td></tr>
+      <tr><td>2. Installation</td><td>Node.js + npm install + .env</td><td>Chaque utilisateur</td><td>1 fois</td></tr>
+      <tr><td>3. Claude Code</td><td>Ajouter la config dans .mcp.json</td><td>Chaque utilisateur</td><td>1 fois</td></tr>
+      <tr><td>4. Connexion</td><td>"Connecte-toi a Outlook"</td><td>Chaque utilisateur</td><td>Tous les ~90 jours</td></tr>
+    </table>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Serum & Co</strong> — Agence web parisienne</p>
+  <p>40 rue du Colisee, 75008 Paris — <a href="https://www.serumandco.com">serumandco.com</a></p>
+  <p style="margin-top:10px;font-size:12px">Documentation generee le 13 avril 2026</p>
+</footer>
+
+</body>
+</html>
