@@ -1,33 +1,35 @@
 # MCP Outlook — Emails & Calendrier Microsoft 365
 
-Connecte Claude Code à Microsoft Outlook via Microsoft Graph API (OAuth2). Permet de lire, envoyer des emails et gérer le calendrier directement depuis Claude Code.
+Connecte Claude Desktop / Claude Code à Microsoft Outlook via Microsoft Graph API (OAuth2). Permet de lire, envoyer des emails et gérer le calendrier directement depuis Claude.
 
 ## Prérequis
 
-- Node.js 18+
-- Un compte Microsoft 365 (Outlook professionnel ou personnel)
-- Les credentials Azure fournis par Serum & Co (fichier `.env`)
+- Node.js 18+ ([nodejs.org](https://nodejs.org))
+- Un compte Microsoft 365 (Outlook professionnel)
+- Les credentials Azure fournis par Anne — services@serumandco.com
+
+---
 
 ## Installation
 
-### 1. Copier le dossier
-
-Copier le dossier `outlook-deploy/` à l'emplacement suivant :
-
-```
-~/.claude/mcp-servers/outlook/
-```
-
-### 2. Installer les dépendances
+### Étape 1 — Cloner le repo
 
 ```bash
-cd ~/.claude/mcp-servers/outlook
+git clone https://github.com/serumandco/outlook-mcp.git %USERPROFILE%\.claude\mcp-servers\outlook
+```
+
+> Sur Mac/Linux : remplacer `%USERPROFILE%` par `~`
+
+### Étape 2 — Installer les dépendances
+
+```bash
+cd %USERPROFILE%\.claude\mcp-servers\outlook
 npm install
 ```
 
-### 3. Créer le fichier `.env`
+### Étape 3 — Créer le fichier `.env`
 
-Créer un fichier `.env` dans le dossier `outlook/` avec les credentials Azure :
+Créer un fichier `.env` dans le dossier `outlook/` (demander les valeurs à Anne) :
 
 ```env
 CLIENT_ID=your_client_id
@@ -37,42 +39,60 @@ REDIRECT_URI=http://localhost:3333/callback
 SCOPES=Mail.Read,Mail.Send,User.Read,Calendars.ReadWrite
 ```
 
-> Les credentials Azure sont fournis par Anne (services@serumandco.com) — ne pas les mettre dans un fichier versionné.
+---
 
-### 4. Ajouter le MCP à Claude Code
+## Configuration Claude Desktop
 
-```bash
-claude mcp add outlook node ~/.claude/mcp-servers/outlook/index.js
-```
+Ouvrir le fichier de config Claude Desktop :
 
-Ou ajouter manuellement dans `~/.claude/settings.json` :
+- **Windows** : `%APPDATA%\Claude\claude_desktop_config.json`
+- **Mac** : `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+Ajouter la section `mcpServers` :
 
 ```json
 {
   "mcpServers": {
     "outlook": {
       "command": "node",
-      "args": ["~/.claude/mcp-servers/outlook/index.js"]
+      "args": ["C:/Users/VOTRE_NOM/.claude/mcp-servers/outlook/index.js"]
     }
   }
 }
 ```
 
-### 5. Authentification (première utilisation)
+> ⚠️ Remplacer `VOTRE_NOM` par votre nom d'utilisateur Windows.  
+> Sur Mac : `"/Users/VOTRE_NOM/.claude/mcp-servers/outlook/index.js"`
 
-Au premier démarrage, utiliser l'outil `authenticate` depuis Claude Code :
+Redémarrer Claude Desktop — le MCP `outlook` doit apparaître dans les outils disponibles (icône 🔌 en bas de la fenêtre).
+
+---
+
+## Configuration Claude Code (CLI)
+
+```bash
+claude mcp add outlook node %USERPROFILE%/.claude/mcp-servers/outlook/index.js
+```
+
+---
+
+## Première utilisation — Authentification
+
+Au premier démarrage, se connecter avec le tool `authenticate` :
 
 ```
 Utilise le tool authenticate pour te connecter à Outlook
 ```
 
-Un navigateur s'ouvre pour le login Microsoft — se connecter avec son compte professionnel Serum & Co.
+Un navigateur s'ouvre sur la page de login Microsoft. Se connecter avec le compte pro Serum & Co. Le token est ensuite sauvegardé localement (pas besoin de ré-authentifier à chaque session).
+
+---
 
 ## Outils disponibles
 
 | Outil | Description |
 |---|---|
-| `authenticate` | Authentification OAuth2 — ouvre le navigateur pour se connecter |
+| `authenticate` | Démarre l'authentification OAuth2 — ouvre le navigateur |
 | `complete_authentication` | Finalise l'auth avec le code de retour |
 | `list_emails` | Liste les emails (filtrable par dossier, nombre, recherche) |
 | `read_email` | Lit le contenu complet d'un email par son ID |
@@ -82,17 +102,26 @@ Un navigateur s'ouvre pour le login Microsoft — se connecter avec son compte p
 | `list_events` | Liste les événements du calendrier |
 | `delete_event` | Supprime un événement du calendrier |
 
-## Utilisation
+---
+
+## Exemples d'utilisation
 
 ```
 Lis mes 10 derniers emails non lus
-Envoie un email à john@example.com avec pour objet "Test" et le message "Bonjour"
-Crée un RDV "Réunion client" demain à 14h pendant 1 heure
-Liste mes événements de la semaine prochaine
+Cherche les emails de pascal@cefri.fr
+Envoie un email à john@example.com : objet "Suivi projet", message "Bonjour..."
+Crée un RDV "Réunion client MICHALAK" vendredi à 14h, durée 1h
+Liste mes événements de cette semaine
 ```
+
+---
 
 ## Dépannage
 
-- **"Tokens expirés"** : relancer `authenticate` pour se reconnecter
-- **"CLIENT_ID manquant"** : vérifier que le fichier `.env` existe dans le bon dossier
-- **Le navigateur ne s'ouvre pas** : copier l'URL affichée dans le terminal et l'ouvrir manuellement
+| Problème | Solution |
+|---|---|
+| `ERREUR : Variables manquantes dans le fichier .env` | Vérifier que le fichier `.env` existe dans le dossier `outlook/` |
+| `Cannot find module` | Relancer `npm install` dans le dossier |
+| Le MCP n'apparaît pas dans Claude Desktop | Vérifier le chemin dans `claude_desktop_config.json` + redémarrer Claude |
+| Tokens expirés | Relancer `authenticate` pour se reconnecter |
+| Le navigateur ne s'ouvre pas | Copier l'URL affichée dans les logs Claude et l'ouvrir manuellement |
